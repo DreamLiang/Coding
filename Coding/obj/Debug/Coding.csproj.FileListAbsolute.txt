@@ -1,0 +1,6 @@
+C:\Study\codeTest\Coding\Coding\bin\Debug\Coding.exe.config
+C:\Study\codeTest\Coding\Coding\bin\Debug\Coding.exe
+C:\Study\codeTest\Coding\Coding\bin\Debug\Coding.pdb
+C:\Study\codeTest\Coding\Coding\obj\Debug\Coding.exe
+C:\Study\codeTest\Coding\Coding\obj\Debug\Coding.pdb
+C:\Study\codeTest\Coding\Coding\obj\Debug\Coding.csprojResolveAssemblyReference.cache
