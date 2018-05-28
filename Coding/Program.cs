@@ -38,8 +38,12 @@ namespace Coding
             //dfs.NumSubarrayProductLessThanK1(d, 100);
 
             //Console.WriteLine(DP.MinWindow1("cnhczmccqouqadqtmjjzl", "cm"));
+            string strs = "wreorttvosuidhrxvmvo";
+            int[] indexs = {14, 12, 10, 5, 0, 18 };
+            string[] sources = { "rxv", "dh", "ui", "ttv", "wreor", "vo" };
+            string[] targets = { "frs", "c", "ql", "qpir", "gwbeve", "n" };
 
-            Console.WriteLine(StringCode.MaskPII("+(501321)-50-23431"));
+            Console.WriteLine(StringCode.FindReplaceString(strs, indexs, sources,targets));
             Console.ReadLine();
         }
 

@@ -1101,5 +1101,44 @@ namespace Coding
 
             return sb.ToString();
         }
+
+        public static string FindReplaceString(string S, int[] indexes, string[] sources, string[] targets)
+        {
+            int n = indexes.Length;
+            int start = 0;
+            StringBuilder sb = new StringBuilder();
+            SortedDictionary<int, Dictionary<string, string>> dct = new SortedDictionary<int, Dictionary<string, string>>();
+
+            for(int i=0;i<n;i++)
+            {
+                dct.Add(indexes[i], new Dictionary<string, string>());
+                dct[indexes[i]].Add(sources[i], targets[i]);
+            }
+            
+            dct.OrderBy(v => v.Key);
+
+            foreach(int key in dct.Keys)
+            {
+                string sourceStr = dct[key].First().Key;
+
+                if (sourceStr.Equals(S.Substring(key,sourceStr.Length)))
+                {
+                    if (key > start)
+                    {
+                        sb.Append(S.Substring(start, key - start));
+                    }
+
+                    sb.Append(dct[key].First().Value);
+                    start = key+ sourceStr.Length;
+                }
+            }
+
+            if(S.Length>start)
+            {
+                sb.Append(S.Substring(start));
+            }
+
+            return sb.ToString();
+        }
     }
 }

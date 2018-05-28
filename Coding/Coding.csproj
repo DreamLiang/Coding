@@ -56,10 +56,12 @@
     <Compile Include="HeapCode.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="LinkedList.cs" />
+    <Compile Include="MathCode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringCode.cs" />
     <Compile Include="Tire.cs" />
+    <Compile Include="UnionFind.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
