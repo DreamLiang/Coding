@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="2Pointer.cs" />
     <Compile Include="ArraysCode.cs" />
+    <Compile Include="Backtracking.cs" />
     <Compile Include="BFS.cs" />
     <Compile Include="BiTree.cs" />
     <Compile Include="Design.cs" />

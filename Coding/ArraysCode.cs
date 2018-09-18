@@ -8,7 +8,28 @@ namespace Coding
 {
     class ArraysCode
     {
-       public int[] SortArray(int[] arr)
+
+        public int PeakIndexInMountainArray(int[] A)
+        {
+            if(A==null||A.Length==0)
+            {
+                return -1;
+            }
+
+            int n = A.Length;
+
+            for(int i=1;i<n-1;i++)
+            {
+                if(A[i]>A[i-1]&&A[i]>A[i+1])
+                {
+                    return i;
+                }
+            }
+
+            return n - 1;
+        }
+
+        public int[] SortArray(int[] arr)
         {
             if(arr==null||arr.Length<2)
             {
@@ -1512,5 +1533,105 @@ namespace Coding
 
             return isvalid;
         }
+
+        public IList<IList<int>> FourSum(int[] nums, int target)
+        {
+
+            IList<IList<int>> res = new List<IList<int>>();
+
+            if (nums == null || nums.Length == 0)
+            {
+                return res;
+            }
+
+            Array.Sort(nums);
+
+            HashSet<List<int>> hset = new HashSet<List<int>>();
+
+            for (int i = 0; i < nums.Length - 3; i++)
+            {
+                for (int j = i + 1; j < nums.Length - 2; j++)
+                {
+                    int left = j + 1, right = nums.Length - 1;
+
+                    while (left < right)
+                    {
+                        int sum = nums[i] + nums[j] + nums[left] + nums[right];
+                        if (sum  > 0)
+                        {
+                            right--;
+                        }
+                        else if (sum < 0)
+                        {
+                            left++;
+                        }
+                        else
+                        {
+                            List<int> ls = new List<int>();
+                            ls.Add(nums[i]);
+                            ls.Add(nums[j]);
+                            ls.Add(nums[left]);
+                            ls.Add(nums[right]);
+
+                            if (!hset.Contains(ls))
+                            {
+                                res.Add(ls);
+                                hset.Add(ls);
+                            }
+
+                            left++;
+                            right--;
+                        }
+                    }
+                }
+            }
+
+            return res;
+        }
+
+        public int[][] Transpose(int[][] A)
+        {
+            if(A==null||A.Length==0)
+            {
+                return null;
+            }
+
+            int m = A.Length;
+            int n = A[0].Length;
+
+            int[][] res = new int[n][];
+
+            for(int i=0;i<n;i++)
+            {
+                res[i] = new int[m];
+                for(int j=0;j<m;j++)
+                {
+                    res[i][j] = A[j][i];
+                }
+            }
+
+            return res;
+        }
     }
 }
+
+    //public class ExamRoom
+    //{
+
+    //    public ExamRoom(int N)
+    //    {
+
+    //    }
+
+    //    public int Seat()
+    //    {
+
+    //    }
+
+    //    public void Leave(int p)
+    //    {
+
+    //    }
+    //}
+    
+//}

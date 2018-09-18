@@ -416,6 +416,68 @@ namespace Coding
 
             return 0;
         }
+
+        public IList<string> TopKFrequent(string[] words, int k)
+        {
+            IList<string> res = new List<string>();
+
+            if(words==null||words.Length==0)
+            {
+                return res;
+            }
+
+            Dictionary<string, int> dct = new Dictionary<string, int>();
+
+            foreach(string word in words)
+            {
+                if(dct.ContainsKey(word))
+                {
+                    dct[word]++;
+                }
+                else
+                {
+                    dct.Add(word, 1);
+                }
+            }
+
+            var dt = dct.OrderByDescending(x => x.Value).ThenBy(x=>x.Key);
+
+            int i = 0;
+
+            while(i<k)
+            {
+                res.Add(dt.ElementAt(i).Key);
+                i++;
+            }
+
+            return res;
+        }
+
+        public int CarFleet(int target, int[] position, int[] speed)
+        {
+            int n = position.Length;
+
+            SortedDictionary<int, double> sdct = new SortedDictionary<int, double>();
+
+            for(int i=0;i<n;i++)
+            {
+                sdct.Add(-position[i],(double) (target - position[i]) / speed[i]);
+            }
+
+            int res = 0;
+            double cur = 0;
+
+            foreach(var s in sdct.Keys)
+            {
+                if(sdct[s]>cur)
+                {
+                    res++;
+                    cur = sdct[s];
+                }
+            }
+
+            return res;
+        }
     }
 
     public class RandomListNode

@@ -736,40 +736,150 @@ namespace Coding
             int[] dx = { -1, -1, -1, 0, 1, 1, 1, 0 };
             int[] dy = { -1, 0, 1, -1, -1, 0, 1, 1 };
 
-            for(int i=0;i<m;i++)
+            for (int i = 0; i < m; i++)
             {
-                for(int j=0;j<n;j++)
+                for (int j = 0; j < n; j++)
                 {
                     int lives = 0;
-                    for(int k=0;k<8;k++)
+                    for (int k = 0; k < 8; k++)
                     {
                         int x = i + dx[k];
                         int y = j + dy[k];
 
-                        if(x>=0&&x<m&&y>=0&&y<n)
+                        if (x >= 0 && x < m && y >= 0 && y < n)
                         {
                             lives += board[x, y] & 1;
                         }
                     }
 
-                    if(board[i,j]==1&&lives>=2&&lives<=3)
+                    if (board[i, j] == 1 && lives >= 2 && lives <= 3)
                     {
                         board[i, j] = 3;
                     }
-                    else if(board[i,j]==0&&lives==3)
+                    else if (board[i, j] == 0 && lives == 3)
                     {
                         board[i, j] = 2;
                     }
                 }
             }
 
-            for(int i=0;i<m;i++)
+            for (int i = 0; i < m; i++)
             {
-                for(int j=0;j<n;j++)
+                for (int j = 0; j < n; j++)
                 {
                     board[i, j] >>= 1;
                 }
             }
+        }
+
+        public double FindMedianSortedArrays(int[] nums1, int[] nums2)
+        {
+            int n1 = nums1.Length, n2 = nums2.Length;
+
+            if (n1 > n2)
+            {
+                return FindMedianSortedArrays(nums2, nums1);
+            }
+
+            int mid = (n1 + n2 + 1) / 2;
+            int left = 0;
+            int right = n1;
+
+            while (left < right)
+            {
+                int m1 = left + (right - left) / 2;
+                int m2 = mid - m1;
+
+                if (nums1[m1] < nums2[m2 - 1])
+                {
+                    left = m1 + 1;
+                }
+                else
+                {
+                    right = m1;
+                }
+            }
+
+            int l1 = left;
+            int l2 = mid - left;
+
+            int c1 = Math.Max(l1 <= 0 ? int.MinValue : nums1[l1 - 1], l2 <= 0 ? int.MinValue : nums2[l2 - 1]);
+
+            if ((n1 + n2) % 2 == 1)
+            {
+                return c1;
+            }
+
+            int c2 = Math.Min(l1 >= n1 ? int.MaxValue : nums1[l1], l2 >= n2 ? int.MaxValue : nums2[l2]);
+
+            return (c1 + c2) * 0.5;
+        }
+
+        public char[,] UpdateBoard(char[,] board, int[] click)
+        {
+            if (board == null || board.Length == 0)
+            {
+                return board;
+            }
+
+           
+            int m = board.GetLength(0), n = board.GetLength(1);
+            List<int[]> ls = new List<int[]>();
+            Queue<int[]> q = new Queue<int[]>();
+
+            q.Enqueue(click);
+
+            while (q.Count > 0)
+            {
+                int[] t = q.Dequeue();
+                int row = t[0], column = t[1];
+                int count = 0;
+                ls.Clear();
+                if (board[row, column] == 'M')
+                {
+                    board[row, column] = 'X';
+                }
+                else
+                {
+                    for (int i = -1; i < 2; i++)
+                    {
+                        for (int j = -1; j < 2; j++)
+                        {
+                            int x = row + i, y = column + j;
+
+                            if (x < 0 || y < 0 || x >= m || y >= n)
+                            {
+                                continue;
+                            }
+
+                            if (board[x, y] == 'M')
+                            {
+                                count++;
+                            }
+                            else if (board[x, y] == 'E' && count == 0)
+                            {
+                                int[] a = { x, y };
+                                ls.Add(a);
+                            }
+                        }
+                    }
+
+                    if (count > 0)
+                    {
+                        board[row, column] = char.Parse(count.ToString());
+                    }
+                    else
+                    {
+                        foreach (int[] arr in ls)
+                        {
+                            board[arr[0], arr[1]] = 'B';
+                            q.Enqueue(arr);
+                        }                        
+                    }
+                }
+            }
+
+            return board;
         }
     }
 }

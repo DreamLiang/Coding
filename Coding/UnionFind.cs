@@ -10,25 +10,25 @@ namespace Coding
     {
         public int[] FindRedundantConnection(int[,] edges)
         {
-            if(edges==null||edges.Length==0)
+            if (edges == null || edges.Length == 0)
             {
                 return new int[0];
             }
 
             int n = edges.GetLength(0);
-            int[] roots = new int[n+1];
+            int[] roots = new int[n + 1];
 
             for (int i = 0; i < n; i++)
             {
                 roots[i] = -1;
             }
 
-            for (int i=0;i<n;i++)
+            for (int i = 0; i < n; i++)
             {
                 int x = FindSet(roots, edges[i, 0]);
                 int y = FindSet(roots, edges[i, 1]);
 
-                if(x==y)
+                if (x == y)
                 {
                     return new int[2] { edges[i, 0], edges[i, 1] };
                 }
@@ -39,7 +39,7 @@ namespace Coding
             return new int[0];
         }
 
-        public static bool ValidTree(int n,int[,] edges)
+        public static bool ValidTree(int n, int[,] edges)
         {
             if (edges == null || edges.Length == 0)
             {
@@ -48,17 +48,17 @@ namespace Coding
 
             int[] roots = new int[n];
 
-            for(int i=0;i<n;i++)
+            for (int i = 0; i < n; i++)
             {
                 roots[i] = -1;
             }
 
-            for(int i=0;i<edges.GetLength(0);i++)
+            for (int i = 0; i < edges.GetLength(0); i++)
             {
                 int x = edges[i, 0];
                 int y = edges[i, 1];
 
-                if(x==y)
+                if (x == y)
                 {
                     return false;
                 }
@@ -66,12 +66,12 @@ namespace Coding
                 roots[x] = y;
             }
 
-            return edges.GetLength(0)==n-1;
+            return edges.GetLength(0) == n - 1;
         }
 
-        public static int FindSet(int[] roots,int i)
+        public static int FindSet(int[] roots, int i)
         {
-            while(roots[i]!=-1)
+            while (roots[i] != -1)
             {
                 i = roots[i];
             }
@@ -92,9 +92,9 @@ namespace Coding
             int n = edges.GetLength(0);
             int[] parents = new int[n + 1];
 
-            for(int i=0;i<n;i++)
+            for (int i = 0; i < n; i++)
             {
-                if(parents[edges[i,1]]==0)
+                if (parents[edges[i, 1]] == 0)
                 {
                     parents[edges[i, 1]] = edges[i, 0];
                 }
@@ -109,20 +109,20 @@ namespace Coding
                 }
             }
 
-            for(int i=0;i<=n;i++)
+            for (int i = 0; i <= n; i++)
             {
                 parents[i] = i;
             }
 
-            for(int i=0;i<n;i++)
+            for (int i = 0; i < n; i++)
             {
-                if(edges[i,1]!=0)
+                if (edges[i, 1] != 0)
                 {
                     int father = edges[i, 0], child = edges[i, 1];
 
-                    if(FindRoot(parents,father)==child)
+                    if (FindRoot(parents, father) == child)
                     {
-                        if(canB[0]==-1)
+                        if (canB[0] == -1)
                         {
                             return new int[2] { edges[i, 0], edges[i, 1] };
                         }
@@ -137,9 +137,9 @@ namespace Coding
             return canA;
         }
 
-        int FindRoot(int[] parents,int i)
+        int FindRoot(int[] parents, int i)
         {
-            while(parents[i]!=i)
+            while (parents[i] != i)
             {
                 parents[i] = parents[parents[i]];
                 i = parents[i];
@@ -223,7 +223,7 @@ namespace Coding
 
                 List<string> emails = new List<string>(dt[id]);
                 emails.Sort(
-                        (String left, String right) => 
+                        (String left, String right) =>
                         {
                             return String.CompareOrdinal(left, right);
                         });
@@ -235,12 +235,131 @@ namespace Coding
 
         int findParent(int[] parent, int i)
         {
-            while ( parent[i]!=-1)
+            while (parent[i] != -1)
             {
                 i = parent[i];
             }
 
             return i;
+        }
+
+        public int MinSwapsCouples(int[] row)
+        {
+            if (row == null || row.Length == 0 || row.Length % 2 != 0)
+            {
+                return 0;
+            }
+
+            Dictionary<int, int> dct = new Dictionary<int, int>();
+            int n = row.Length;
+            int res = 0;
+
+            for (int i = 0; i < n; i += 2)
+            {
+                dct.Add(row[i], row[i + 1]);
+                dct.Add(row[i + 1], row[i]);
+            }
+
+            int index = 0;
+
+            while (index < n)
+            {
+                if (dct[index] != index + 1)
+                {
+                    int nextValue = dct[index + 1];
+                    int currVaule = dct[index];
+                    dct[index] = index + 1;
+                    dct[nextValue] = currVaule;
+                    dct[currVaule] = nextValue;
+                    res++;
+                }
+
+                index += 2;
+            }
+
+            return res;
+        }
+
+        public int[] HitBricks(int[][] grid, int[][] hits)
+        {
+            if(grid==null||hits==null||grid.Length==0||hits.Length==0)
+            {
+                return null;
+            }
+
+            int hitLen = hits.GetLength(0);
+            int rows = grid.GetLength(0);
+            int cols = grid[0].Length;
+
+            for(int i=0;i<hitLen;i++)
+            {
+                if(grid[hits[i][0]][hits[i][1]]==1)
+                {
+                    grid[hits[i][0]][hits[i][1]] = 0;
+                }
+                else
+                {
+                    grid[hits[i][0]][hits[i][1]] = -1;
+                }
+            }
+
+            for(int i=0;i<cols;i++)
+            {
+                GridDFS(grid, 0, i);
+            }
+
+            int[] res = new int[hitLen];
+
+            for(int i=hitLen-1;i>=0;i--)
+            {
+                if(grid[hits[i][0]][hits[i][1]]!=-1)
+                {
+                    grid[hits[i][0]][hits[i][1]] = 1;
+
+                    if(IsConnectedTop(grid, hits[i][0], hits[i][1]))
+                    {
+                        res[i] = GridDFS(grid, hits[i][0], hits[i][1]);
+                    }
+                }
+            }
+
+            return res;
+        }
+
+        int GridDFS(int[][] grid,int row,int col)
+        {
+            int m = grid.GetLength(0), n = grid[0].Length;
+            int ret = 0;
+
+            if(row<0||row>=m||col<0||col>=n||grid[row][col]!=1)
+            {
+                return ret;
+            }
+
+            grid[row][col] = 2;
+
+            ret += GridDFS(grid, row - 1, col);
+            ret += GridDFS(grid, row + 1, col);
+            ret += GridDFS(grid, row, col-1);
+            ret += GridDFS(grid, row, col+1);
+
+            return ret;
+        }
+
+        bool IsConnectedTop(int[][] grid,int row,int col)
+        {
+            int m = grid.GetLength(0), n = grid[0].Length;
+
+            if ((row-1>=0&&grid[row-1][col]==2)||
+                (row+1<m&&grid[row+1][col]==2)||
+                (col - 1 >= 0 && grid[row][col-1] == 2) ||
+                (col + 1 <n&& grid[row][col+1] == 2)||
+                row==0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

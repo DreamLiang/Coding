@@ -1375,6 +1375,353 @@ namespace Coding
 
             return ls;
         }
+
+        public IList<IList<int>> LevelOrder(TreeNode root)
+        {
+            IList<IList<int>> res = new List<IList<int>>();
+
+            if(root==null)
+            {
+                return res;
+            }
+
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+
+            while(q.Count!=0)
+            {
+                IList<int> ls = new List<int>();
+                int c = q.Count;
+
+                for(int i=0;i<c;i++)
+                {
+                    TreeNode tn = q.Dequeue();
+                    ls.Add(tn.val);
+
+                    if(tn.left!=null)
+                    {
+                        q.Enqueue(tn.left);
+                    }
+
+                    if(tn.right!=null)
+                    {
+                        q.Enqueue(tn.right);
+                    }
+                }
+
+                if(ls.Count>0)
+                {
+                    res.Add(ls);
+                }
+            }
+
+            return res;
+        }
+
+        public TreeNode SubtreeWithAllDeepest(TreeNode root)
+        {
+            if(root==null)
+            {
+                return root;
+            }
+
+            int left = Depth(root.left);
+            int right = Depth(root.right);
+
+            if(left==right)
+            {
+                return root;
+            }
+
+            if(left>right)
+            {
+                return SubtreeWithAllDeepest(root.left);
+            }
+
+            return SubtreeWithAllDeepest(root.right);
+        }
+
+        int Depth(TreeNode node)
+        {
+            if(node==null)
+            {
+                return 0;
+            }
+
+            return Math.Max(Depth(node.left), Depth(node.right)) + 1;
+        }
+
+        TreeNode LCA(TreeNode root, HashSet<TreeNode> hs)
+        {
+            if(root==null||hs.Contains(root))
+            {
+                return root;
+            }
+
+            TreeNode left = LCA(root.left, hs);
+            TreeNode right = LCA(root.right, hs);
+
+            if(left!=null&&right!=null)
+            {
+                return root;
+            }
+            else if(left!=null)
+            {
+                return left;
+            }
+            else
+            {
+                return right;
+            }
+        }
+
+        public TreeNode SubtreeWithAllDeepestByLevel(TreeNode root)
+        {
+            Dictionary<int, HashSet<TreeNode>> dct = new Dictionary<int, HashSet<TreeNode>>();
+            int level = 0;
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+
+            while(q.Count>0)
+            {
+                HashSet<TreeNode> hs = new HashSet<TreeNode>();
+                int n = q.Count;
+
+                for(int i=0;i<n;i++)
+                {
+                    TreeNode node = q.Dequeue();
+
+                    if(node.left!=null)
+                    {
+                        q.Enqueue(node.left);
+                    }
+
+                    if(node.right!=null)
+                    {
+                        q.Enqueue(node.right);
+                    }
+
+                    hs.Add(node);
+                }
+
+                dct.Add(level, hs);
+                level++;
+            }
+
+            HashSet<TreeNode> s = dct[level-1];
+
+            return LCA(root, s);
+        }
+
+        public TreeNode SubtreeWithAllDeepest1(TreeNode root)
+        {
+            if (root == null)
+            {
+                return root;
+            }
+
+            TreeNode[] res = new TreeNode[1];
+            int[] maxDepth = new int[1];
+            GetDepth(root, 0, res, maxDepth);
+
+            return res[0];
+        }
+
+        int GetDepth(TreeNode root,int depth, TreeNode[] ts,int[] MaxDepth)
+        {
+            if(root==null)
+            {
+                return depth;
+            }
+
+            int left = GetDepth(root.left, depth + 1, ts, MaxDepth);
+            int right = GetDepth(root.right, depth + 1, ts, MaxDepth);
+
+            if(left==right&&left>=MaxDepth[0])
+            {
+                MaxDepth[0] = left;
+                ts[0] = root;
+            }
+
+            return Math.Max(left, right);
+        }
+
+        public IList<int> DistanceK(TreeNode root, TreeNode target, int K)
+        {
+            IList<int> res = new List<int>();
+
+            if(root==null)
+            {
+                return res;
+            }
+
+            Dictionary<TreeNode, List<TreeNode>> dct = new Dictionary<TreeNode, List<TreeNode>>();
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            HashSet<TreeNode> visited = new HashSet<TreeNode>();
+
+            q.Enqueue(root);
+
+            while(q.Count>0)
+            {
+                TreeNode node = q.Dequeue();
+
+                if(node.left!=null)
+                {
+                    q.Enqueue(node.left);
+
+                    if(!dct.ContainsKey(node))
+                    {
+                        dct.Add(node, new List<TreeNode>());
+                    }
+                    
+                    dct[node].Add(node.left);
+
+                    if (!dct.ContainsKey(node.left))
+                    {
+                        dct.Add(node.left, new List<TreeNode>());
+                    }
+
+                    dct[node.left].Add(node);
+                }
+
+                if(node.right!=null)
+                {
+                    q.Enqueue(node.right);
+
+                    if (!dct.ContainsKey(node))
+                    {
+                        dct.Add(node, new List<TreeNode>());
+                    }
+
+                    dct[node].Add(node.right);
+
+                    if (!dct.ContainsKey(node.right))
+                    {
+                        dct.Add(node.right, new List<TreeNode>());
+                    }
+
+                    dct[node.right].Add(node);
+                }
+            }
+
+            q.Clear();
+            q.Enqueue(target);
+            visited.Add(target);
+
+            while(q.Count>0)
+            {
+                int size = q.Count;
+
+                if(K==0)
+                {
+                    for(int i=0;i<size;i++)
+                    {
+                        res.Add(q.Dequeue().val);
+                    }
+
+                    return res;
+                }
+
+                for(int i=0;i<size;i++)
+                {
+                    TreeNode node = q.Dequeue();
+
+                    if (dct.Count > 0)
+                    {
+                        foreach (TreeNode next in dct[node])
+                        {
+                            if (!visited.Contains(next))
+                            {
+                                visited.Add(next);
+                                q.Enqueue(next);
+                            }
+                        }
+                    }
+                }
+
+                K--;
+            }
+
+            return res;
+        }
+
+        public IList<int> DistanceK1(TreeNode root, TreeNode target, int K)
+        {
+            IList<int> res = new List<int>();
+
+            if (root == null)
+            {
+                return res;
+            }
+
+            Dictionary<TreeNode, TreeNode> dct = new Dictionary<TreeNode, TreeNode>();
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            HashSet<TreeNode> visited = new HashSet<TreeNode>();
+            q.Enqueue(root);
+            
+            while(q.Count>0)
+            {
+                TreeNode node = q.Dequeue();
+
+                if(node==target)
+                {
+                    break;
+                }
+
+                if(node.left!=null)
+                {
+                    q.Enqueue(node.left);
+                    dct.Add(node.left, node);
+                }
+
+                if(node.right!=null)
+                {
+                    q.Enqueue(node.right);
+                    dct.Add(node.right, node);
+                }
+            }
+
+            q.Clear();
+            q.Enqueue(target);
+            visited.Add(target);
+
+            while (K>0)
+            {
+                if(q.Count==0)
+                {
+                    return res;
+                }
+
+                for (int i = q.Count; i > 0; i--)
+                {
+                    TreeNode node = q.Dequeue();
+
+                    if (node.left != null && visited.Add(node.left))
+                    {
+                        q.Enqueue(node.left);
+                    }
+
+                    if (node.right != null && visited.Add(node.right))
+                    {
+                        q.Enqueue(node.right);
+                    }
+
+                    if (dct.ContainsKey(node) && visited.Add(dct[node]))
+                    {
+                        q.Enqueue(dct[node]);
+                    }
+                }
+
+                K--;
+            }
+
+            while(q.Count>0)
+            {
+                res.Add(q.Dequeue().val);
+            }
+
+            return res;
+        }
     }
     public class TreeNode
     {
@@ -1415,4 +1762,54 @@ namespace Coding
             }
         }
     }
-}
+
+    public class Node
+    {
+        public int val;
+        public IList<Node> children;
+
+        public Node() { }
+        public Node(int _val, IList<Node> _children)
+        {
+            val = _val;
+            children = _children;
+        }
+
+    }
+        public class NaryTree
+        {
+            public int MaxDepth(Node root)
+            {
+                if(root==null)
+                {
+                    return 0;
+                }
+                
+                int[] maxDepth=new int[1];
+                
+                MaxDepthHelper(root,0,maxDepth);
+
+                return maxDepth[0];
+            }
+
+            public void MaxDepthHelper(Node root, int depth, int[] maxDepth)
+            {
+                if(root==null)
+                {
+                    return;
+                }
+
+                depth++;
+                
+                if(depth>maxDepth[0])
+                {
+                    maxDepth[0] = depth;
+                }
+                
+                foreach(Node nd in root.children)
+                {
+                    MaxDepthHelper(nd, depth, maxDepth);
+                }
+            }
+        }
+    }

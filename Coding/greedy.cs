@@ -455,5 +455,115 @@ namespace Coding
 
             return v1.end - v2.end;
         }
+
+        public int[] AdvantageCount1(int[] A, int[] B)
+        {
+            if ((A == null && B == null) || (A.Length == 0 && B.Length == 0))
+            {
+                return new int[0];
+            }
+
+            SortedDictionary<int, List<int>> sdt = new SortedDictionary<int, List<int>>();
+            int n = A.Length;
+            int[] res = new int[n];
+
+            for(int i=0;i<n;i++)
+            {
+                if(!sdt.ContainsKey(B[i]))
+                {
+                    sdt.Add(B[i], new List<int>());
+                }
+
+                sdt[B[i]].Add(i);
+            }
+
+            Array.Sort(A);
+
+            int low = 0, high = n - 1;
+            
+            while(low<=high)
+            {
+                int num = sdt.Last().Key;
+                int m = sdt[num].Count;
+                int index = sdt[num].Last();
+                sdt[num].RemoveAt(m - 1);
+
+                if(sdt[num].Count==0)
+                {
+                    sdt.Remove(num);
+                }
+
+                if(A[high]>num)
+                {
+                    res[index] = A[high];
+                    high--;
+                }
+                else
+                {
+                    res[index] = A[low];
+                    low++;
+                }
+            }
+
+            return res;
+        }
+
+        public int[] AdvantageCount(int[] A, int[] B)
+        {
+            if((A==null&&B==null)||(A.Length==0&&B.Length==0))
+            {
+                return new int[0];
+            }
+
+            int n = B.Length;
+
+            for(int i=0;i<n;i++)
+            {
+                int j = i;
+                int diff = int.MaxValue;
+                int index = i;
+                int minIndex = i;
+
+                while(j<n)
+                {
+                    if(A[j]>B[i]&&diff>A[j]-B[i])
+                    {
+                        diff = A[j] - B[i];
+                        index = j;
+                    }
+
+                    if(A[minIndex]>A[j])
+                    {
+                        minIndex = j;
+                    }
+
+                    j++;
+                }
+
+                if(diff!=int.MaxValue)
+                {
+                    if(i!=index)
+                    {
+                        Swap(A, i, index);
+                    } 
+                }
+                else
+                {
+                    if(i!=minIndex)
+                    {
+                        Swap(A, i, minIndex);
+                    }
+                }
+            }
+
+            return A;
+        }
+
+        void Swap(int[] a,int i,int j)
+        {
+            int temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+        }
     }
 }

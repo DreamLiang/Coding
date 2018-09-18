@@ -468,5 +468,262 @@ namespace Coding
             NumIslandsHelper(grid, i, j - 1, m, n);
             NumIslandsHelper(grid, i, j + 1, m, n);
         }
+
+        public static IList<int> SplitIntoFibonacci(string S)
+        {
+            IList<int> res = new List<int>();
+            
+            if(string.IsNullOrEmpty(S)||S.StartsWith("-"))
+            {
+                return res;
+            }
+
+
+            SFBHelper(S, res,0);
+
+            return res;
+        }
+      
+      static bool SFBHelper(string S,IList<int> ls, int start)
+        {
+            if(start==S.Length&&ls.Count>=3)
+            {
+                return true;
+            }
+
+            for(int i=start;i<S.Length;i++)
+            {
+                if(S[start]=='0'&&i>start)
+                {
+                    break;
+                }
+
+                long num = long.Parse(S.Substring(start, i - start + 1));
+
+                if(num>int.MaxValue)
+                {
+                    break;
+                }
+
+                int count = ls.Count;
+
+                if (count >= 2 && num > ls[count - 1] +ls[count-2])
+                {
+                    break;
+                }
+
+                if(count<2||num==ls[count-1]+ls[count-2])
+                {
+                    ls.Add((int)num);
+
+                    if(SFBHelper(S,ls,i+1))
+                    {
+                        return true;
+                    }
+
+                    ls.RemoveAt(ls.Count - 1);
+                }
+            }
+
+            return false;
+        }
+      static  void SplitIntoFibonacciHelper(string S, int start, int n, List<string> strls, IList<int> ls,bool[] isEnd)
+        {
+            if(start==n && isEnd[0] == false)
+            {
+                int m = strls.Count;
+                int i = 0;
+                int strlen = 0;
+
+                while (i < m)
+                {
+                    strlen += strls[i].Length;
+                    int num = int.MinValue;
+                    if (!(strls[i].Length>1&&strls[i][0]=='0')&&int.TryParse(strls[i], out num))
+                    {
+                        ls.Add(num);
+                    }
+                    else
+                    {
+                        ls.Clear();
+                        return;
+                    }
+
+                    i++;
+                }
+
+                if (strlen == S.Length)
+                {
+
+                    i = 2;
+                    while (i < m && ls[i] == ls[i - 1] + ls[i - 2])
+                    {
+                        i++;
+                    }
+
+                    if (m >= 3 && i == m)
+                    {
+                        isEnd[0] = true;
+                    }
+                    else
+                    {
+                        ls.Clear();
+                    }
+                }
+                else
+                {
+                    ls.Clear();
+                }
+
+                return;
+            }
+            else if(isEnd[0])
+            {
+                return;
+            }
+
+            if(isEnd[0]==false)
+            {
+                for(int i=start;i<n;i++)
+                {
+                    strls.Add(S.Substring(start, i - start + 1));
+                    int len = strls.Count;
+
+                    SplitIntoFibonacciHelper(S, i + 1, n, strls, ls, isEnd);
+
+                    if (isEnd[0])
+                    {
+                        return;
+                    }
+
+                    strls.RemoveAt(len - 1);
+                }
+            }
+        }
+
+        public char[,] UpdateBoard(char[,] board, int[] click)
+        {
+            if(board==null||board.Length==0)
+            {
+                return board;
+            }
+
+            int row = click[0], column = click[1];
+            int m = board.GetLength(0), n = board.GetLength(1);
+            int count = 0;
+            List<int[]> ls = new List<int[]>();
+
+            if(board[row,column]=='M')
+            {
+                board[row, column] = 'X';
+            }
+            else
+            {
+                for(int i=-1;i<2;i++)
+                {
+                    for(int j=-1;j<2;j++)
+                    {
+                        int x = row + i, y = column + j;
+
+                        if(x<0||y<0||x>=m||y>=n)
+                        {
+                            continue;
+                        }
+
+                        if(board[x,y]=='M')
+                        {
+                            count++;
+                        }
+                        else if(board[x,y]=='E'&&count==0)
+                        {
+                            int[] a = { x, y };
+                            ls.Add(a);
+                        }
+                    }
+                }
+
+                if(count>0)
+                {
+                    board[row, column] = char.Parse(count.ToString());
+                }
+                else
+                {
+                    foreach(int[] arr in ls)
+                    {
+                        board[arr[0], arr[1]] = 'B';
+                        UpdateBoard(board, arr); 
+                    }
+                }
+            }
+
+            return board;
+        }
+
+        public char[,] UpdateBoard1(char[,] board, int[] click)
+        {
+            if (board == null || board.Length == 0)
+            {
+                return board;
+            }
+
+            int row = click[0], column = click[1];
+            int m = board.GetLength(0), n = board.GetLength(1);
+            int count = 0;
+
+            if (board[row, column] == 'M')
+            {
+                board[row, column] = 'X';
+            }
+            else
+            {
+                for (int i = -1; i < 2; i++)
+                {
+                    for (int j = -1; j < 2; j++)
+                    {
+                        int x = row + i, y = column + j;
+
+                        if (x < 0 || y < 0 || x >= m || y >= n)
+                        {
+                            continue;
+                        }
+
+                        if (board[x, y] == 'M')
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0)
+                {
+                    board[row, column] = char.Parse(count.ToString());
+                }
+                else
+                {
+                    board[row, column] = 'B';
+
+                    for(int i=-1;i<2;i++)
+                    {
+                        for(int j=-1;j<2;j++)
+                        {
+                            int x = row + i, y = column + j;
+
+                            if (x < 0 || y < 0 || x >= m || y >= n)
+                            {
+                                continue;
+                            }
+
+                            if (board[x, y] == 'E')
+                            {
+                                int[] next = { x, y };
+                                UpdateBoard1(board, next);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return board;
+        }
     }
 }
