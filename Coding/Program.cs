@@ -33,7 +33,7 @@ namespace Coding
 
             //FileStream st = File.Open(str, FileMode.Open);
 
-            //int[] d = { 10, 5, 2, 6 };
+            int[] d = { 3, 1, 2, 4 };
 
             //dfs.NumSubarrayProductLessThanK1(d, 100);
 
@@ -44,7 +44,7 @@ namespace Coding
             //string[] targets = { "frs", "c", "ql", "qpir", "gwbeve", "n" };
 
             //Console.WriteLine(StringCode.FindReplaceString(strs, indexs, sources,targets));
-            Console.WriteLine(dfs.SplitIntoFibonacci("123456579"));
+            Console.WriteLine(ArraysCode.SumSubarrayMins(d));
             Console.ReadLine();
         }
 

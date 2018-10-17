@@ -1140,5 +1140,171 @@ namespace Coding
 
             return sb.ToString();
         }
+
+        public IList<string> WordSubsets(string[] A, string[] B)
+        {
+            IList<string> res = new List<string>();
+            int i;
+            int[] c = new int[26];
+            int[] tmp;
+
+            foreach(string s in B)
+            {
+                tmp = Counter(s);
+
+                for(i=0;i<26;i++)
+                {
+                    c[i] = Math.Max(c[i], tmp[i]);
+                }
+            }
+
+            foreach(string s in A)
+            {
+                tmp = Counter(s);
+
+                for(i=0;i<26;i++)
+                {
+                    if(tmp[i]<c[i])
+                    {
+                        break;
+                    }
+                }
+
+                if(i==26)
+                {
+                    res.Add(s);
+                }
+            }
+
+            return res;
+        }
+
+        int[] Counter(string s)
+        {
+            int[] arr = new int[26];
+
+            foreach(char c in s)
+            {
+                arr[c - 'a']++;
+            }
+
+            return arr;
+        }
+
+        public IList<string> FindAndReplacePattern(string[] words, string pattern)
+        {
+            IList<string> res = new List<string>();
+
+            int n = words.Length;
+            Dictionary<char, List<int>> pDct = new Dictionary<char, List<int>>();
+
+            for(int i=0;i<pattern.Length;i++)
+            {
+                if(!pDct.ContainsKey(pattern[i]))
+                {
+                    pDct.Add(pattern[i], new List<int>());
+                }
+
+                pDct[pattern[i]].Add(i);
+            }
+
+            pDct.OrderBy(k => k.Value.Count);
+
+            for(int i=0;i<n;i++)
+            {
+                if (words[i].Length == pattern.Length)
+                {
+                    Dictionary<char, List<int>> dct = new Dictionary<char, List<int>>();
+
+                    for (int j = 0; j < words[i].Length; j++)
+                    {
+                        if (!dct.ContainsKey(words[i][j]))
+                        {
+                            dct.Add(words[i][j], new List<int>());
+                        }
+
+                        dct[words[i][j]].Add(j);
+                    }
+
+                    dct.OrderBy(k => k.Value.Count);
+
+                    if (dct.Keys.Count == pDct.Keys.Count)
+                    {
+                        List<List<int>> ls = dct.Values.ToList();
+                        List<List<int>> pl = pDct.Values.ToList();
+                        int j = 0;
+                        for (; j < ls.Count; j++)
+                        {
+                            ls[j].Sort();
+                            pl[j].Sort();
+
+                            if (ls[j].Count!=pl[j].Count||!ls[j].SequenceEqual(pl[j]))
+                            {
+                                break;
+                            }
+                        }
+
+                        if (j == ls.Count)
+                        {
+                            res.Add(words[i]);
+                        }
+                    }
+                }
+            }
+
+            return res;
+        }
+
+        public string ReverseOnlyLetters(string S)
+        {
+            if(string.IsNullOrEmpty(S)||S.Length==1)
+            {
+                return S;
+            }
+
+            string des;
+            int n = S.Length;
+            char[] cc = S.ToCharArray();
+            int i = 0, j = n - 1;
+            
+            while(i<j)
+            {
+                while(i<j&&!IsLetter(cc[i]))
+                {
+                    i++;
+                }
+
+                while(i<j&&!IsLetter(cc[j]))
+                {
+                    j--;
+                }
+
+                if (i < j)
+                {
+                    char temp = cc[i];
+                    cc[i] = cc[j];
+                    cc[j] = temp;
+                }
+
+                i++;
+                j--;
+            }
+
+            des = new string(cc);
+
+            return des;
+        }
+
+        bool IsLetter(char c)
+        {
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

@@ -213,5 +213,147 @@ namespace Coding
 
             return maxProfits;
         }
+
+        public int[] SortArrayByParityII(int[] A)
+        {
+            if(A==null||A.Length<2)
+            {
+                return A;
+            }
+
+            int n = A.Length;
+            int eIndex = 0, oIndex = 1;
+
+            while(eIndex<n&&oIndex<n)
+            {
+                while(eIndex<n&&A[eIndex]%2==0)
+                {
+                    eIndex += 2;
+                }
+
+                while(oIndex<n&&A[oIndex]%2!=0)
+                {
+                    oIndex += 2;
+                }
+
+                if (eIndex < n && oIndex < n)
+                {
+                    int tmp = A[eIndex];
+                    A[eIndex] = A[oIndex];
+                    A[oIndex] = tmp;
+                }
+            }
+
+            return A;
+        }
+
+        public int MinAddToMakeValid(string S)
+        {
+            if(string.IsNullOrEmpty(S))
+            {
+                return 0;
+            }
+
+            int n = S.Length;
+            int count = 0;
+            int l = 0, r = 0;
+            int i = 0;
+
+            while(i<n)
+            {
+                if(S[i]=='(')
+                {
+                    if (r > l)
+                    {
+                        r = 0;
+                        l = 0;
+                    }
+
+                    l++;
+                }
+                else
+                {
+                    r++;
+
+                    if(r>l)
+                    {
+                        count++;
+                    }
+                }
+
+                i++;
+            }
+
+            if(l>r)
+            {
+                count += l - r;
+            }
+
+            return count;
+        }
+
+        public int ThreeSumMulti(int[] A, int target)
+        {
+            if(A==null||A.Length<3)
+            {
+                return 0;
+            }
+
+            long res = 0;
+            int mod = 1000000007;
+            int n = A.Length;
+            Array.Sort(A);
+
+            for (int i = 0; i < n - 2; i++)
+            {
+                int l = i + 1;
+                int r = n - 1;
+
+                while (l < r)
+                {
+                    int s = A[i] + A[l] + A[r];
+
+                    if (s == target)
+                    {
+                        if (A[l] == A[r])
+                        {
+                            res += (r - l + 1) * (r - l) / 2 % mod;
+                            break;
+                        }
+                        else
+                        {
+                            int lc = 1, rc = 1;
+
+                            while (l + lc < r && A[l + lc] == A[l])
+                            {
+                                lc++;
+                            }
+
+                            while (r - rc > l && A[r - rc] == A[r])
+                            {
+                                rc++;
+                            }
+
+                            res += (lc * rc) % mod;
+                            l += lc;
+                            r -= rc;
+                        }
+                    }
+                    else if (s > target)
+                    {
+                        r--;
+                    }
+                    else
+                    {
+                        l++;
+                    }
+                }
+            }
+
+            return (int)(res % mod);
+
+        }
+
+        
     }
 }

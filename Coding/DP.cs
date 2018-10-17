@@ -818,30 +818,30 @@ namespace Coding
 
             int[,] res = new int[3, 2];
 
-            for(int i=0;i<3;i++)
+            for (int i = 0; i < 3; i++)
             {
                 res[i, 0] = 1;
                 res[i, 1] = 1;
             }
 
-            for(int i=0;i<nums.Length;i++)
+            for (int i = 0; i < nums.Length; i++)
             {
-                for(int j=2;j>=0;j--)
+                for (int j = 2; j >= 0; j--)
                 {
-                    if(i<=j)
+                    if (i <= j)
                     {
                         res[j, 0] *= nums[i];
                         res[j, 1] *= nums[i];
                     }
-                    else if(j==0)
+                    else if (j == 0)
                     {
                         res[j, 0] = Math.Min(res[j, 0], nums[i]);
-                        res[j, 1] = Math.Max(res[j, 1] , nums[i]);
+                        res[j, 1] = Math.Max(res[j, 1], nums[i]);
                     }
                     else
                     {
-                        res[j, 0] = Math.Min(res[j, 0], Math.Min(res[j-1, 0] * nums[i], res[j-1, 1] * nums[i]));
-                        res[j, 1] = Math.Max(res[j, 1], Math.Max(res[j-1, 0] * nums[i], res[j-1, 1] * nums[i]));
+                        res[j, 0] = Math.Min(res[j, 0], Math.Min(res[j - 1, 0] * nums[i], res[j - 1, 1] * nums[i]));
+                        res[j, 1] = Math.Max(res[j, 1], Math.Max(res[j - 1, 0] * nums[i], res[j - 1, 1] * nums[i]));
                     }
                 }
             }
@@ -851,7 +851,7 @@ namespace Coding
 
         public string LongestWord(string[] words)
         {
-            if (words == null||words.Length==0)
+            if (words == null || words.Length == 0)
             {
                 return string.Empty;
             }
@@ -861,19 +861,19 @@ namespace Coding
 
             Array.Sort(words);
 
-            foreach(string word in words)
+            foreach (string word in words)
             {
                 hs.Add(word);
             }
 
-            for(int i=words.Length-1;i>=0;i--)
+            for (int i = words.Length - 1; i >= 0; i--)
             {
                 string str = words[i];
                 int j = 0;
-                
-                while(j<str.Length)
+
+                while (j < str.Length)
                 {
-                    if(hs.Contains(str.Substring(0,j+1)))
+                    if (hs.Contains(str.Substring(0, j + 1)))
                     {
                         j++;
                     }
@@ -883,20 +883,20 @@ namespace Coding
                     }
                 }
 
-                if(j==str.Length)
+                if (j == str.Length)
                 {
-                    if(ls.Count==0)
+                    if (ls.Count == 0)
                     {
                         ls.Add(str);
                     }
-                    else if(ls.Last().Length<=j)
+                    else if (ls.Last().Length <= j)
                     {
                         ls.Add(str);
                     }
                 }
             }
 
-            if(ls.Count>0)
+            if (ls.Count > 0)
             {
                 ls.Sort();
 
@@ -919,18 +919,18 @@ namespace Coding
 
             foreach (string word in words)
             {
-                if(word.Length==1||hs.Contains(word.Substring(0,word.Length-1)))
+                if (word.Length == 1 || hs.Contains(word.Substring(0, word.Length - 1)))
                 {
-                    if(word.Length>res.Length)
+                    if (word.Length > res.Length)
                     {
                         res = word;
                     }
 
                     hs.Add(word);
                 }
-                
+
             }
-           
+
             return res;
         }
 
@@ -938,21 +938,21 @@ namespace Coding
         {
             IList<IList<string>> res = new List<IList<string>>();
 
-            if(accounts.Count==0)
+            if (accounts.Count == 0)
             {
                 return res;
             }
 
             Dictionary<string, List<string>> dct = new Dictionary<string, List<string>>();
 
-            foreach(IList<string> account in accounts)
+            foreach (IList<string> account in accounts)
             {
                 string name = account[0];
-                
-                if(!dct.ContainsKey(name))
+
+                if (!dct.ContainsKey(name))
                 {
-                    dct.Add(name, new List<string> ());
-                    for(int i=1;i<account.Count;i++)
+                    dct.Add(name, new List<string>());
+                    for (int i = 1; i < account.Count; i++)
                     {
                         dct[name].Add(account[i]);
                     }
@@ -962,19 +962,19 @@ namespace Coding
                 else
                 {
                     bool isInclude = false;
-                    for(int i=1;i<account.Count;i++)
+                    for (int i = 1; i < account.Count; i++)
                     {
-                        if(dct[name].Contains(account[i]))
+                        if (dct[name].Contains(account[i]))
                         {
                             isInclude = true;
                         }
                     }
 
-                    if(isInclude)
+                    if (isInclude)
                     {
                         for (int i = 1; i < account.Count; i++)
                         {
-                            if(!dct[name].Contains(account[i]))
+                            if (!dct[name].Contains(account[i]))
                             {
                                 dct[name].Add(account[i]);
                             }
@@ -996,7 +996,7 @@ namespace Coding
                 }
             }
 
-            foreach(string key in dct.Keys)
+            foreach (string key in dct.Keys)
             {
                 List<string> ls = dct[key];
                 ls.Sort();
@@ -1013,7 +1013,7 @@ namespace Coding
         {
             IList<string> res = new List<string>();
 
-            if(source==null||source.Length==0)
+            if (source == null || source.Length == 0)
             {
                 return res;
             }
@@ -1025,11 +1025,11 @@ namespace Coding
             {
                 int n = s.Length;
 
-                for(int i=0;i<n;)
+                for (int i = 0; i < n;)
                 {
-                    if(!inBlock)
+                    if (!inBlock)
                     {
-                        if(i==n-1)
+                        if (i == n - 1)
                         {
                             str += s[i];
                             i++;
@@ -1077,7 +1077,7 @@ namespace Coding
                     }
                 }
 
-                if(str.Length>0&&!inBlock)
+                if (str.Length > 0 && !inBlock)
                 {
                     res.Add(str);
                     str = string.Empty;
@@ -1089,7 +1089,7 @@ namespace Coding
 
         public int PivotIndex(int[] nums)
         {
-            if(nums==null||nums.Length<2)
+            if (nums == null || nums.Length < 2)
             {
                 return -1;
             }
@@ -1099,7 +1099,7 @@ namespace Coding
             int[] dpright = new int[n];
             int left = 0, right = 0;
 
-            for(int i=0,j=n-1;i<n&&j>=0;i++,j--)
+            for (int i = 0, j = n - 1; i < n && j >= 0; i++, j--)
             {
                 left += nums[i];
                 right += nums[j];
@@ -1107,23 +1107,23 @@ namespace Coding
                 dpright[j] = right;
             }
 
-            for(int i=0;i<n;i++)
+            for (int i = 0; i < n; i++)
             {
-                if(i==0)
+                if (i == 0)
                 {
-                    if(dpright[1]==0)
+                    if (dpright[1] == 0)
                     {
                         return 0;
                     }
                 }
-                else if(i==n-1)
+                else if (i == n - 1)
                 {
-                    if(dpleft[n-2]==0)
+                    if (dpleft[n - 2] == 0)
                     {
                         return n - 1;
                     }
                 }
-                else if(dpleft[i-1]==dpright[i+1])
+                else if (dpleft[i - 1] == dpright[i + 1])
                 {
                     return i;
                 }
@@ -1231,7 +1231,7 @@ namespace Coding
 
         public static string MinWindow(string S, string T)
         {
-            if(string.IsNullOrEmpty(S)||string.IsNullOrEmpty(T))
+            if (string.IsNullOrEmpty(S) || string.IsNullOrEmpty(T))
             {
                 return string.Empty;
             }
@@ -1240,10 +1240,10 @@ namespace Coding
             int start = 0, end = 0, count = T.Length;
             int minLen = int.MaxValue, minStart = 0;
             int last = 0;
-            int n = T.Length-1;
-            for (int i=0;i<T.Length;i++)
+            int n = T.Length - 1;
+            for (int i = 0; i < T.Length; i++)
             {
-                if(!map.ContainsKey(T[i]))
+                if (!map.ContainsKey(T[i]))
                 {
                     map.Add(T[i], new List<int>());
                 }
@@ -1255,19 +1255,19 @@ namespace Coding
             {
                 if (map.ContainsKey(S[end]))
                 {
-                    if(map[S[end]].Contains(last))
+                    if (map[S[end]].Contains(last))
                     {
                         count--;
                         last++;
                     }
                 }
 
-                
+
                 start = end;
 
                 while (count == 0 && start >= 0)
                 {
-                    if(map.ContainsKey(S[start])&&map[S[start]].Contains(n))
+                    if (map.ContainsKey(S[start]) && map[S[start]].Contains(n))
                     {
                         n--;
                     }
@@ -1275,7 +1275,7 @@ namespace Coding
                     if (S[start] == T[0])
                     {
 
-                        if(n==-1)
+                        if (n == -1)
                         {
                             count = T.Length;
                             last = 0;
@@ -1391,7 +1391,7 @@ namespace Coding
 
                 while (count == 0)
                 {
-                    if (map.ContainsKey(S[start]) && map[S[start]].Contains(last-1))
+                    if (map.ContainsKey(S[start]) && map[S[start]].Contains(last - 1))
                     {
                         last--;
                     }
@@ -1399,7 +1399,7 @@ namespace Coding
                     if (S[start] == T[0])
                     {
 
-                        if (last==0)
+                        if (last == 0)
                         {
                             count = T.Length;
 
@@ -1429,53 +1429,53 @@ namespace Coding
 
             int m = S.Length, n = T.Length;
             int[,] dp = new int[n, m];
-            
-            for(int i=0;i<n;i++)
+
+            for (int i = 0; i < n; i++)
             {
-                for(int j=0;j<m;j++)
+                for (int j = 0; j < m; j++)
                 {
                     dp[i, j] = -1;
                 }
             }
 
-            for(int i=0;i<m;i++)
+            for (int i = 0; i < m; i++)
             {
-                if(T[0]==S[i])
+                if (T[0] == S[i])
                 {
                     dp[0, i] = i;
                 }
             }
 
-            for(int i=1;i<n;i++)
+            for (int i = 1; i < n; i++)
             {
                 int k = -1;
 
-                for(int j=0;j<m;j++)
+                for (int j = 0; j < m; j++)
                 {
-                    if(k!=-1&&T[i]==S[j])
+                    if (k != -1 && T[i] == S[j])
                     {
                         dp[i, j] = k;
                     }
 
-                    if(dp[i-1,j]!=-1)
+                    if (dp[i - 1, j] != -1)
                     {
                         k = dp[i - 1, j];
                     }
                 }
             }
 
-            int st=-1,len = int.MaxValue;
+            int st = -1, len = int.MaxValue;
 
-            for(int i=0;i<m;i++)
+            for (int i = 0; i < m; i++)
             {
-                if(dp[n-1,i]!=-1&&i-dp[n-1,i]+1<len)
+                if (dp[n - 1, i] != -1 && i - dp[n - 1, i] + 1 < len)
                 {
                     len = i - dp[n - 1, i] + 1;
                     st = dp[n - 1, i];
                 }
             }
 
-            if(st==-1)
+            if (st == -1)
             {
                 return string.Empty;
             }
@@ -1487,7 +1487,7 @@ namespace Coding
 
         public int MaxSumSubmatrix(int[,] matrix, int k)
         {
-            if(matrix==null||matrix.Length==0)
+            if (matrix == null || matrix.Length == 0)
             {
                 return 0;
             }
@@ -1497,14 +1497,14 @@ namespace Coding
             int[,] colSum = new int[m, n];
             int[,] allSum = new int[m, n];
             int[,] rSum = new int[m, n];
-            int res = matrix[0,0];
+            int res = matrix[0, 0];
             int min = int.MaxValue;
 
-            for(int i=0;i<m;i++)
+            for (int i = 0; i < m; i++)
             {
-                for(int j=0;j<n;j++)
+                for (int j = 0; j < n; j++)
                 {
-                    if(i==0)
+                    if (i == 0)
                     {
                         colSum[i, j] += matrix[i, j];
                     }
@@ -1513,13 +1513,13 @@ namespace Coding
                         colSum[i, j] += colSum[i - 1, j] + matrix[i, j];
                     }
 
-                    if(colSum[i, j] == k || matrix[i, j] == k)
+                    if (colSum[i, j] == k || matrix[i, j] == k)
                     {
                         return k;
                     }
                     else
                     {
-                        if(Math.Abs(colSum[i,j]-k)<min)
+                        if (Math.Abs(colSum[i, j] - k) < min)
                         {
                             res = colSum[i, j];
                             min = Math.Abs(colSum[i, j] - k);
@@ -1534,11 +1534,11 @@ namespace Coding
                 }
             }
 
-            for(int i=0;i<m;i++)
+            for (int i = 0; i < m; i++)
             {
-                for(int j=0;j<n;j++)
+                for (int j = 0; j < n; j++)
                 {
-                    if(j==0)
+                    if (j == 0)
                     {
                         allSum[i, j] = colSum[i, j];
                     }
@@ -1547,7 +1547,7 @@ namespace Coding
                         allSum[i, j] += allSum[i, j - 1] + colSum[i, j];
                     }
 
-                    if(allSum[i,j]==k)
+                    if (allSum[i, j] == k)
                     {
                         return k;
                     }
@@ -1562,17 +1562,17 @@ namespace Coding
                 }
             }
 
-            for(int i=0;i<m-1;i++)
+            for (int i = 0; i < m - 1; i++)
             {
-                for(int j=0;j<n-1;j++)
+                for (int j = 0; j < n - 1; j++)
                 {
-                    for(int l=i;k<m;k++)
+                    for (int l = i; k < m; k++)
                     {
-                        for(int t=j+1;t<n;t++ )
+                        for (int t = j + 1; t < n; t++)
                         {
                             int res1 = int.MaxValue;
 
-                            if(i==l)
+                            if (i == l)
                             {
                                 res1 = allSum[l, t] - allSum[i, j];
                             }
@@ -1596,7 +1596,7 @@ namespace Coding
 
         public int FindSubstringInWraproundString(string p)
         {
-            if(string.IsNullOrEmpty(p))
+            if (string.IsNullOrEmpty(p))
             {
                 return 0;
             }
@@ -1605,9 +1605,9 @@ namespace Coding
             int[,] dp = new int[n, n];
             HashSet<string> hs = new HashSet<string>();
 
-            for(int i=n-1;i>=0;i--)
+            for (int i = n - 1; i >= 0; i--)
             {
-                for(int j=i;j<n;j++)
+                for (int j = i; j < n; j++)
                 {
                     string s = p.Substring(i, j - i + 1);
                     if (i == j)
@@ -1620,7 +1620,7 @@ namespace Coding
                     }
                     else
                     {
-                        if(dp[i,j-1]==1&&(p[j]-p[j-1]==1||p[j]-p[j-1]==-25))
+                        if (dp[i, j - 1] == 1 && (p[j] - p[j - 1] == 1 || p[j] - p[j - 1] == -25))
                         {
                             dp[i, j] = 1;
                             if (!hs.Contains(s))
@@ -1646,9 +1646,9 @@ namespace Coding
             int count = 0;
             int res = 0;
 
-            for(int i=0;i<p.Length;i++)
+            for (int i = 0; i < p.Length; i++)
             {
-                if(i>0&&(p[i]-p[i-1]==1||p[i-1]-p[i]==25))
+                if (i > 0 && (p[i] - p[i - 1] == 1 || p[i - 1] - p[i] == 25))
                 {
                     count++;
                 }
@@ -1661,7 +1661,7 @@ namespace Coding
                 dp[index] = Math.Max(dp[index], count);
             }
 
-            for(int i=0;i<26;i++)
+            for (int i = 0; i < 26; i++)
             {
                 res += dp[i];
             }
@@ -1673,19 +1673,19 @@ namespace Coding
         {
             IList<int> res = new List<int>();
 
-            if(left>right||right<=0)
+            if (left > right || right <= 0)
             {
                 return res;
             }
 
-            if(left<=0)
+            if (left <= 0)
             {
                 left = 1;
             }
 
-            for(int i=left;i<=right;i++)
+            for (int i = left; i <= right; i++)
             {
-                if(IsSelfDividingNumber(i))
+                if (IsSelfDividingNumber(i))
                 {
                     res.Add(i);
                 }
@@ -1696,23 +1696,23 @@ namespace Coding
 
         bool IsSelfDividingNumber(int n)
         {
-            if(n<=0)
+            if (n <= 0)
             {
                 return false;
             }
 
-            if(n<10)
+            if (n < 10)
             {
                 return true;
             }
 
             int d = n;
 
-            while(n>0)
+            while (n > 0)
             {
                 int num = n % 10;
 
-                if(num==0||d%num!=0)
+                if (num == 0 || d % num != 0)
                 {
                     return false;
                 }
@@ -1725,7 +1725,7 @@ namespace Coding
 
         public int CherryPickup(int[,] grid)
         {
-            if(grid==null||grid.Length==0)
+            if (grid == null || grid.Length == 0)
             {
                 return 0;
             }
@@ -1735,24 +1735,24 @@ namespace Coding
 
             int[,] dp = new int[m, n];
 
-            for(int i=0;i<m;i++)
+            for (int i = 0; i < m; i++)
             {
-                for(int j=0;j<n;j++)
+                for (int j = 0; j < n; j++)
                 {
-                    if(i==0&&j==0)
+                    if (i == 0 && j == 0)
                     {
-                        if(grid[i,j]==-1)
+                        if (grid[i, j] == -1)
                         {
                             return 0;
                         }
                         else
                         {
                             dp[i, j] = grid[i, j];
-                        } 
+                        }
                     }
-                    else if(i==0)
+                    else if (i == 0)
                     {
-                        if(grid[i,j]!=-1 && dp[i, j - 1] != -1)
+                        if (grid[i, j] != -1 && dp[i, j - 1] != -1)
                         {
                             dp[i, j] = dp[i, j - 1] + grid[i, j];
                         }
@@ -1761,9 +1761,9 @@ namespace Coding
                             dp[i, j] = -1;
                         }
                     }
-                    else if(j==0)
+                    else if (j == 0)
                     {
-                        if (grid[i, j] != -1&& dp[i - 1, j] != -1)
+                        if (grid[i, j] != -1 && dp[i - 1, j] != -1)
                         {
                             dp[i, j] = dp[i - 1, j] + grid[i, j];
                         }
@@ -1776,11 +1776,11 @@ namespace Coding
                     {
                         if (grid[i, j] != -1)
                         {
-                            if (dp[i - 1, j] != -1&&dp[i,j-1]!=-1)
+                            if (dp[i - 1, j] != -1 && dp[i, j - 1] != -1)
                             {
-                                dp[i,j]= dp[i - 1, j] + dp[i, j-1] + grid[i, j];
+                                dp[i, j] = dp[i - 1, j] + dp[i, j - 1] + grid[i, j];
                             }
-                            else if(dp[i - 1, j] != -1)
+                            else if (dp[i - 1, j] != -1)
                             {
                                 dp[i, j] = dp[i - 1, j] + grid[i, j];
                             }
@@ -1806,18 +1806,18 @@ namespace Coding
 
         public int MinCostClimbingStairs(int[] cost)
         {
-            if(cost==null||cost.Length<2)
+            if (cost == null || cost.Length < 2)
             {
                 return 0;
             }
 
             int n = cost.Length;
-            int[] dp = new int[n+1];
+            int[] dp = new int[n + 1];
 
             dp[0] = 0;
             dp[1] = 0;
 
-            for(int i=2;i<=n;i++)
+            for (int i = 2; i <= n; i++)
             {
                 dp[i] = Math.Min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
             }
@@ -1827,7 +1827,7 @@ namespace Coding
 
         public int[] MaxSumOfThreeSubarrays(int[] nums, int k)
         {
-            if(nums==null||nums.Length==0)
+            if (nums == null || nums.Length == 0)
             {
                 return new int[0];
             }
@@ -1894,7 +1894,7 @@ namespace Coding
 
         public int NumDecodings2(string s)
         {
-            if(string.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
                 return 0;
             }
@@ -1905,11 +1905,11 @@ namespace Coding
 
             dp[n] = 1;
 
-            if(s[n-1]=='0')
+            if (s[n - 1] == '0')
             {
                 dp[n - 1] = 0;
             }
-            else if(s[n-1]=='*')
+            else if (s[n - 1] == '*')
             {
                 dp[n - 1] = 9;
             }
@@ -1918,14 +1918,14 @@ namespace Coding
                 dp[n - 1] = 1;
             }
 
-            for(int i=n-2;i>=0;i--)
+            for (int i = n - 2; i >= 0; i--)
             {
-                if(s[i]=='0')
+                if (s[i] == '0')
                 {
                     continue;
                 }
 
-                if(s[i]=='*')
+                if (s[i] == '*')
                 {
                     dp[i] += dp[i + 1] * 9;
                 }
@@ -1934,9 +1934,9 @@ namespace Coding
                     dp[i] += dp[i + 1];
                 }
 
-                if(s[i+1]=='*')
+                if (s[i + 1] == '*')
                 {
-                    if(s[i] == '1')
+                    if (s[i] == '1')
                     {
                         dp[i] += dp[i + 2] * 9;
                     }
@@ -1944,7 +1944,7 @@ namespace Coding
                     {
                         dp[i] += dp[i + 2] * 6;
                     }
-                    else if(s[i]=='*')
+                    else if (s[i] == '*')
                     {
                         dp[i] += 15 * dp[i + 2];
                     }
@@ -1953,7 +1953,7 @@ namespace Coding
                 {
                     if (s[i] == '*')
                     {
-                        if(s[i+1]<='6')
+                        if (s[i + 1] <= '6')
                         {
                             dp[i] += 2 * dp[i + 2];
                         }
@@ -1974,7 +1974,417 @@ namespace Coding
                 dp[i] %= m;
             }
 
-            return (int) dp[0];
+            return (int)dp[0];
+        }
+
+        public bool StoneGame(int[] piles)
+        {
+            if (piles == null || piles.Length == 0)
+            {
+                return false;
+            }
+
+            int n = piles.Length;
+            int[,] dp = new int[n, n];
+
+            for (int i = 0; i < n; i++)
+            {
+                dp[i, i] = piles[i];
+            }
+
+            for (int d = 1; d < n; d++)
+            {
+                for (int i = 0; i < n - d; i++)
+                {
+                    dp[i, i + d] = Math.Max(dp[i + 1, i + d], dp[i, i + d - 1]);
+                }
+            }
+
+            return dp[0, n - 1] > 0;
+        }
+
+        public int NumMusicPlaylists(int N, int L, int K)
+        {
+            long mod = (long)1e9 + 7;
+            long[,] dp = new long[N + 1, L + 1];
+
+            for (int i = K + 1; i <= N; i++)
+            {
+                for (int j = i; j <= L; j++)
+                {
+                    if (i == j || i == K + 1)
+                    {
+                        dp[i, j] = FB(i, mod);
+                    }
+                    else
+                    {
+                        dp[i, j] = (dp[i - 1, j - 1] * i + dp[i, j - 1] * (i - K)) % mod;
+                    }
+                }
+            }
+
+            return (int)dp[N, L];
+        }
+
+        long FB(int n, long mod)
+        {
+            return n > 0 ? n * FB(n - 1, mod) % mod : 1;
+        }
+
+        public double LargestSumOfAverages(int[] A, int K)
+        {
+            int n = A.Length;
+            double[,] dp = new double[n + 1, K + 1];
+            double s = 0;
+            for (int i = 0; i < n; i++)
+            {
+                s += A[i];
+                dp[i + 1, 1] = s / (i + 1);
+            }
+
+            return lsaHelper(A, K, dp, n);
+        }
+
+        double lsaHelper(int[] A, int k, double[,] dp, int n)
+        {
+            if (dp[n, k] > 0)
+            {
+                return dp[n, k];
+            }
+
+            if (n < k)
+            {
+                return 0;
+            }
+
+            double s = 0;
+            for (int i = n - 1; i > 0; i--)
+            {
+                s += A[i];
+                dp[n, k] = Math.Max(dp[n, k], lsaHelper(A, k - 1, dp, i) + s / (n - i));
+            }
+
+            return dp[n, k];
+        }
+
+        /*Navie Approach */
+        public double LargestSumOfAveragesDFS(int[] A, int K)
+        {
+            int n = A.Length;
+            int s = 0;
+            double[] sum = new double[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                s += A[i];
+                sum[i] = s;
+            }
+
+            return hp(A, K, sum, n, 0);
+        }
+
+        double hp(int[] A, int k, double[] sum, int n, int start)
+        {
+            if (k == 1)
+            {
+                return (sum[n - 1] - sum[start] + A[start]) / (n - start);
+            }
+
+            double num = 0;
+
+            for (int i = start; i + k <= n; i++)
+            {
+                num = Math.Max(num, ((double)((sum[i] - sum[start] + A[start]) / (i - start + 1)) + hp(A, k - 1, sum, n, i + 1)));
+            }
+
+            return num;
+        }
+
+        /* Recursion + Top-Bottom Memoralization - Seperate moving pieces */
+
+        public double LargestSumOfAveragesDFSMemo(int[] A, int K)
+        {
+            int n = A.Length;
+            int s = 0;
+            double[] sum = new double[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                s += A[i];
+                sum[i] = s;
+            }
+
+            double[,] dp = new double[n, K + 1];
+            return hpMemo(A, K, sum, dp, n, 0);
+        }
+
+        double hpMemo(int[] A, int k, double[] sum, double[,] dp, int n, int start)
+        {
+            if (dp[start, k] != 0)
+            {
+                return dp[start, k];
+            }
+
+            if (k == 1)
+            {
+                dp[start, k] = (sum[n - 1] - sum[start] + A[start]) / (n - start);
+
+                return dp[start, k];
+            }
+
+            for (int i = start; i + k <= n; i++)
+            {
+                dp[start, k] = Math.Max(dp[start, k], ((double)((sum[i] - sum[start] + A[start]) / (i - start + 1)) + hpMemo(A, k - 1, sum, dp, n, i + 1)));
+            }
+
+            return dp[start, k];
+        }
+
+
+        /* Bottom-UP 2D DP*/
+        public double LargestSumOfAveragesBUp(int[] A, int K)
+        {
+            int n = A.Length;
+            int s = 0;
+            double[] sum = new double[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                s += A[i];
+                sum[i] = s;
+            }
+
+            double[,] dp = new double[n, K + 1];
+
+            for (int groups = 1; groups <= K; groups++)
+            {
+                for (int i = 0; i + groups <= n; i++)
+                {
+                    if (groups == 1)
+                    {
+                        dp[i, groups] = (sum[n - 1] - sum[i] + A[i]) / (n - i);
+                    }
+                    else
+                    {
+                        for (int j = i; j + groups <= n; j++)
+                        {
+                            dp[i, groups] = Math.Max(dp[i, groups], dp[j + 1, groups - 1] + (sum[j] - sum[i] + A[i]) / (j - i + 1));
+                        }
+                    }
+                }
+            }
+
+            return dp[0, K];
+        }
+
+        /* Bottom-UP 1D DP*/
+        public double LargestSumOfAveragesBUp1D(int[] A, int K)
+        {
+            int n = A.Length;
+            int s = 0;
+            double[] sum = new double[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                s += A[i];
+                sum[i] = s;
+            }
+
+            double[] dp = new double[n];
+
+            for (int groups = 1; groups <= K; groups++)
+            {
+                for (int i = 0; i + groups <= n; i++)
+                {
+                    if (groups == 1)
+                    {
+                        dp[i] = (sum[n - 1] - sum[i] + A[i]) / (n - i);
+                    }
+                    else
+                    {
+                        for (int j = i; j + groups <= n; j++)
+                        {
+                            dp[i] = Math.Max(dp[i], dp[j + 1] + (sum[j] - sum[i] + A[i]) / (j - i + 1));
+                        }
+                    }
+                }
+            }
+
+            return dp[0];
+        }
+
+        public int FindCheapestPrice(int n, int[][] flights, int src, int dst, int K)
+        {
+            if (flights == null || flights.Length == 0)
+            {
+                return -1;
+            }
+
+            int t = 0;
+            int m = flights.GetLength(0);
+            int max = int.MaxValue;
+            Queue<int[]> q = new Queue<int[]>();
+            q.Enqueue(new int[2] { src, 0 });
+
+            while (q.Count > 0 && t <= K)
+            {
+                int size = q.Count;
+
+                for (int i = 0; i < size; i++)
+                {
+                    int[] arr = q.Dequeue();
+
+                    for (int j = 0; j < m; j++)
+                    {
+                        if (flights[j][0] == arr[0])
+                        {
+                            int cost = flights[j][2] + arr[1];
+
+                            if (flights[j][1] == dst)
+                            {
+                                if (max > cost)
+                                {
+                                    max = cost;
+                                }
+                            }
+
+                            if (cost < max)
+                            {
+                                q.Enqueue(new int[] { flights[j][1], cost });
+                            }
+                        }
+                    }
+                }
+
+                t++;
+            }
+
+            return max == int.MaxValue ? -1 : max;
+        }
+
+        public int DeleteAndEarn(int[] nums)
+        {
+            if (nums == null || nums.Length == 0)
+            {
+                return 0;
+            }
+
+            int[] values = new int[10001];
+            int n = values.Length;
+            int skip = 0, take = 0;
+
+            foreach (int num in nums)
+            {
+                values[num] += num;
+            }
+
+            for(int i=0;i<n;i++)
+            {
+                int takei = values[i]+skip;
+                int skipi = Math.Max(skip, take);
+                skip = skipi;
+                take = takei;
+            }
+
+            return Math.Max(take, skip);
+        }
+
+        public int MinRefuelStops(int target, int startFuel, int[][] stations)
+        {
+            int n = stations.GetLength(0);
+
+            if (n == 0 && startFuel >= target)
+            {
+                return 0;
+            }
+
+            long[] dp = new long[n + 1];
+            dp[0] = startFuel;
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int t = i; t >= 0 && dp[t] >= stations[i][0]; t--)
+                {
+                    dp[t + 1] = Math.Max(dp[t + 1], dp[t] + stations[i][1]);
+                }
+            }
+
+            for (int i = 0; i <= n; i++)
+            {
+                if (dp[i] >= target)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        public bool PredictTheWinner(int[] nums)
+        {
+            if(nums==null||nums.Length==0)
+            {
+                return true;
+            }
+
+            int n = nums.Length;
+
+            if(n%2==0)
+            {
+                return true;
+            }
+
+            int[,] dp = new int[n, n];
+
+            for(int i=0;i<n;i++)
+            {
+                dp[i, i] = nums[i];
+            }
+
+            for(int len=1;len<n;len++)
+            {
+                for(int i=0;i<n-len;i++)
+                {
+                    int j = i + len;
+                    dp[i, j] = Math.Max(nums[i] - dp[i + 1, j], nums[j] - dp[i, j - 1]);
+                }
+            }
+
+            return dp[0, n - 1]>=0;
+        }
+
+        public bool PredictTheWinner1DP(int[] nums)
+        {
+            if (nums == null || nums.Length == 0)
+            {
+                return true;
+            }
+
+            int n = nums.Length;
+
+            if (n % 2 == 0)
+            {
+                return true;
+            }
+
+            int[] dp = new int[n];
+
+            for(int i=n-1;i>=0;i--)
+            {
+                for(int j=i;j<n;j++)
+                {
+                    if(i==j)
+                    {
+                        dp[i] = nums[i];
+                    }
+                    else
+                    {
+                        dp[j] = Math.Max(nums[i] - dp[j], nums[j] - dp[j - 1]);
+                    }
+                }
+            }
+
+            return dp[n - 1] >= 0;
         }
     }
 }

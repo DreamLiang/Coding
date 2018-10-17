@@ -443,47 +443,6 @@ namespace Coding
             return count == 0;
         }
 
-        //public int TrapRainWater(int[,] heightMap)
-        //{
-        //    if(heightMap==null||heightMap.Length==0)
-        //    {
-        //        return 0;
-        //    }
-
-        //    int row = heightMap.GetLength(0);
-        //    int col = heightMap.GetLength(1);
-
-
-        //}
-
-        //public IList<int[]> PacificAtlantic(int[,] matrix)
-        //{
-        //    IList<int[]> res = new List<int[]>();
-
-        //    if(matrix==null||matrix.Length==0)
-        //    {
-        //        return res;
-        //    }
-
-        //    int row = matrix.GetLength(0);
-        //    int col = matrix.GetLength(1);
-
-        //    if(row==1&&col==1)
-        //    {
-        //        res.Add(new int[2] { 0, 0 });
-        //        return res;
-        //    }
-
-        //    int i = 0, j = 0;
-        //    res.Add(new int[2] { i, col - 1 });
-
-        //    if(col!=row)
-
-        //    while(i<row||j<col)
-        //    {
-
-        //    }
-        //}
 
         public int[,] UpdateMatrix(int[,] matrix)
         {
@@ -881,5 +840,174 @@ namespace Coding
 
             return board;
         }
+
+        public int SnakesAndLadders(int[][] board)
+        {
+            if(board==null||board.Length==0||board[0].Length==0)
+            {
+                return 0;
+            }
+
+            int steps = 0;
+            int n = board[0].Length;
+            HashSet<string> visited = new HashSet<string>();
+            Queue<int[]> q = new Queue<int[]>();
+            q.Enqueue(new int[] { n - 1, 0 });
+
+            while(q.Count>0)
+            {
+                int size = q.Count;
+                steps++;
+
+                for(int i=0;i<size;i++)
+                {
+                    int[] cur = q.Dequeue();
+                    visited.Add(cur[0] + "," + cur[1]);
+                    for(int j=1;j<=6;j++)
+                    {
+                        int[] next = TakeSteps(n, cur[0], cur[1], j);
+
+                        if(next[0]==n&&next[1]==n)
+                        {
+                            return steps;
+                        }
+
+                        if(board[next[0]][next[1]]!=-1)
+                        {
+                            next = GetCubic(n, board[next[0]][next[1]]);
+                        }
+
+                        if(next[0]==n&&next[1]==n)
+                        {
+                            return steps;
+                        }
+
+                        if(!visited.Contains(next[0]+","+next[1]))
+                        {
+                            q.Enqueue(next);
+                        }
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+
+        int[] TakeSteps(int n,int row,int col,int step )
+        {
+            int next = 0;
+
+            if ((row + n) % 2 == 0)
+            {
+                next = (n - 1 - row) * n + n- col + step;
+            }
+            else
+            {
+                next = (n - 1 - row) * n + col+1 + step;
+            }
+
+            return GetCubic(n, next);
+        }
+
+        int[] GetCubic(int n,int value)
+        {
+            if(value>=n*n)
+            {
+                return new int[] { n, n };
+            }
+
+            int row = n - 1 - (value-1) / n;
+            int col = 0;
+
+            if((row+n)%2==0)
+            {
+                if(value%n==0)
+                {
+                    col = 0;
+                }
+                else
+                {
+                    col = n - 1 - (value-1) % n;
+                }
+            }
+            else
+            {
+                if(value%n==0)
+                {
+                    col = n - 1;
+                }
+                else
+                {
+                    col = (value-1) % n;
+                }
+            }
+
+            return new int[] { row, col };
+        }
+
+        public int MinMalwareSpread(int[][] graph, int[] initial)
+        {
+            if (graph == null || graph.Length == 0)
+            {
+                return -1;
+            }
+
+            int res = 0;
+
+            HashSet<int> ihs = new HashSet<int>();
+
+            foreach(int a in initial)
+            {
+                ihs.Add(a);
+            }
+
+            int min = int.MaxValue;
+
+            foreach(int a in initial)
+            {
+                ihs.Remove(a);
+                int c = MinMalwareSpreadBFS(graph, ihs);
+
+                if(c<min||(c==min&&a<res))
+                {
+                    res = a;
+                    min = c;
+                }
+
+                ihs.Add(a);
+            }
+
+            return res;
+        }
+
+        int MinMalwareSpreadBFS(int[][] graph,HashSet<int> hs)
+        {
+            HashSet<int> bad = new HashSet<int>(hs);
+            Queue<int> q = new Queue<int>();
+
+            foreach(int a in hs)
+            {
+                q.Enqueue(a);
+            }
+
+            while(q.Count>0)
+            {
+                int next = q.Dequeue();
+
+                for(int i=0;i<graph[next].Length;i++)
+                {
+                    if(graph[next][i]==1&&!bad.Contains(i))
+                    {
+                        bad.Add(i);
+                        q.Enqueue(i);
+                    }
+                }
+            }
+
+            return bad.Count;
+        }
     }
 }
+
+

@@ -1722,6 +1722,80 @@ namespace Coding
 
             return res;
         }
+
+        public TreeNode ConstructFromPrePost(int[] pre, int[] post)
+        {
+            int n = pre.Length;
+
+            return BuildTreeNodeHelperNew(pre, post, new int[1],0, n - 1);
+        }
+
+        public TreeNode BuildTreeNodeHelperNew(int[] pre, int[] pos, int[] preLeft, int posLeft, int posRight)
+        {
+            if(posLeft>posRight)
+            {
+                return null;
+            }
+
+            preLeft[0]++;
+            TreeNode root = new TreeNode(pos[posRight]);
+
+            if(posRight==posLeft)
+            {
+                return root;
+            }
+
+            int i = posLeft;
+
+            while(i<=posRight&&pos[i]!=pre[preLeft[0]])
+            {
+                i++;
+            }
+
+            root.left = BuildTreeNodeHelperNew(pre, pos, preLeft, posLeft, i);
+            root.right = BuildTreeNodeHelperNew(pre, pos, preLeft, i + 1, posRight-1);
+
+            return root;
+        }
+        public TreeNode BuildTreeNodeHelper(int[] pre,int[] pos,int preLeft,int preRight,int posLeft,int posRight)
+        {
+            if(preLeft > preRight||posLeft>posRight)
+            {
+                return null;
+            }
+
+            TreeNode root = new TreeNode(pos[posRight]);
+            preLeft++;
+            posRight--;
+
+            if(preLeft==preRight||posLeft==posRight)
+            {
+                return root;
+            }
+
+            int left = 0, right = 0;
+            for (int i = preLeft; i <= preRight; i++)
+            {
+                if (pre[i] == pos[posRight])
+                {
+                    left = i - 1;
+                    break;
+                }
+            }
+
+            for(int i=posRight;i>=posLeft;i--)
+            {
+                if(pos[i]==pre[preLeft])
+                {
+                    right = i;
+                    break;
+                }
+            }
+
+            root.left = BuildTreeNodeHelper(pre, pos, preLeft, left, posLeft, right);
+            root.right = BuildTreeNodeHelper(pre, pos, left + 1, preRight, right + 1, posRight);
+            return root;
+        }
     }
     public class TreeNode
     {
@@ -1812,4 +1886,106 @@ namespace Coding
                 }
             }
         }
+
+    public class CBTInserter
+    {
+        List<int> ls = new List<int>();
+        TreeNode root;
+        Dictionary<int, TreeNode> dct = new Dictionary<int, TreeNode>();
+
+        public CBTInserter(TreeNode root)
+        {
+            this.root = root;
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+
+            while(q.Count>0)
+            {
+                int size = q.Count;
+                TreeNode cur = q.Dequeue();
+                ls.Add(cur.val);
+                dct.Add(ls.Count, cur);
+
+                if(cur.left!=null)
+                {
+                    q.Enqueue(cur.left);
+                }
+
+                if (cur.right!= null)
+                {
+                    q.Enqueue(cur.right);
+                }
+            }
+        }
+
+        public int Insert(int v)
+        {
+            ls.Add(v);
+            int index = ls.Count;
+
+            TreeNode parent = dct[index / 2];
+
+            if(index%2==0)
+            {
+                parent.left = new TreeNode(v);
+                dct.Add(index, parent.left);
+            }
+            else
+            {
+                parent.right = new TreeNode(v);
+                dct.Add(index, parent.right);
+            }
+
+            return parent.val;
+        }
+
+        public TreeNode Get_root()
+        {
+            return this.root;
+        }
     }
+
+    public class CBTInserterNew
+    {
+        TreeNode root;
+        Queue<TreeNode> q = new Queue<TreeNode>();
+
+        public CBTInserterNew(TreeNode root)
+        {
+            this.root = root;
+            
+            q.Enqueue(root);
+
+            while(q.Peek().left!=null&&q.Peek().right!=null)
+            {
+                TreeNode node = q.Dequeue();
+                q.Enqueue(node.left);
+                q.Enqueue(node.right);
+            }
+        }
+
+        public int Insert(int v)
+        {
+            TreeNode p = q.Peek();
+
+            if (p.left==null)
+            {
+                p.left = new TreeNode(v);
+            }
+            else
+            {
+                p.right = new TreeNode(v);
+                q.Enqueue(p.left);
+                q.Enqueue(p.right);
+                q.Dequeue();
+            }
+
+            return p.val;
+        }
+
+        public TreeNode Get_root()
+        {
+            return this.root;
+        }
+    }
+}

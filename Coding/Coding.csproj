@@ -48,6 +48,7 @@
     <Compile Include="Backtracking.cs" />
     <Compile Include="BFS.cs" />
     <Compile Include="BiTree.cs" />
+    <Compile Include="BS.cs" />
     <Compile Include="Design.cs" />
     <Compile Include="dfs.cs" />
     <Compile Include="DP.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="MathCode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StackCode.cs" />
     <Compile Include="StringCode.cs" />
     <Compile Include="Tire.cs" />
     <Compile Include="UnionFind.cs" />

@@ -1612,6 +1612,339 @@ namespace Coding
 
             return res;
         }
+
+        public static int SumSubarrayMins(int[] A)
+        {
+            if(A==null||A.Length==0)
+            {
+                return 0;
+            }
+
+            int res = 0;
+
+            int c = 1;
+            int n = A.Length;
+            const int b = 10 * 10 * 10 * 10 * 10 * 10 * 10 * 10 * 10 + 7;
+
+
+            while (c<=n)
+            {
+                int start = 0;
+
+                for(int i=c;i<=n;i++)
+                {
+                    int min = A[start];
+
+                    for(int j=start;j<i;j++)
+                    {
+                        if(A[j]<min)
+                        {
+                            min = A[j];
+                        }
+                    }
+
+                    res += min;
+                    start++;
+                }
+
+                c++;
+            }
+
+            return res%b;
+        }
+
+        public static int SumSubarrayMins1(int[] A)
+
+        {
+            if (A == null || A.Length == 0)
+            {
+                return 0;
+            }
+
+            int res = 0;
+
+            int c = 1;
+            int n = A.Length;
+            const int b = 10 * 10 * 10 * 10 * 10 * 10 * 10 * 10 * 10 + 7;
+            int min = int.MaxValue;
+
+            while (c <= n)
+            {
+                int j = 0;
+                int i = c;
+
+                c++;
+            }
+
+            return res % b;
+        }
+
+        public int SumSubarrayMinsLR(int[] A)
+        {
+
+            if (A == null || A.Length == 0)
+            {
+                return 0;
+            }
+
+            int MOD = 1000000007;
+            int res = 0;
+            int c = 1;
+            int n = A.Length;
+            int[] left = new int[n];
+            int[] right = new int[n];
+            Stack<int[]> s1 = new Stack<int[]>();
+            Stack<int[]> s2 = new Stack<int[]>();
+
+            for(int i=0;i<n;i++)
+            {
+                int count = 1;
+
+                while(s1.Count>0&& s1.Peek()[0]>A[i])
+                {
+                    count += s1.Pop()[1];
+                }
+
+                s1.Push(new int[] { A[i], count });
+                left[i] = count;
+            }
+
+            for(int i=n-1;i>=0;i--)
+            {
+                int count = 1;
+
+                while (s2.Count > 0 && s2.Peek()[0] >=A[i])
+                {
+                    count += s2.Pop()[1];
+                }
+
+                s2.Push(new int[] { A[i], count });
+                right[i] = count;
+            }
+
+            for(int i=0;i<n;i++)
+            {
+                res = (res + A[i] * left[i] * right[i]) % MOD;
+            }
+
+            return res;
+        }
+
+        public int SumSubarrayMinsMap(int[] A)
+        {
+            if (A == null || A.Length == 0)
+            {
+                return 0;
+            }
+
+            int MOD = 1000000007;
+            int res = 0;
+            int n = A.Length;
+
+            Dictionary<int, int> dct = new Dictionary<int, int>();
+            Stack<int> st = new Stack<int>();
+
+            for(int i=0;i<n;i++)
+            {
+                while(st.Count>0&&A[st.Peek()]>A[i])
+                {
+                    st.Pop();
+                }
+
+                int cur = 0;
+
+                if(st.Count==0)
+                {
+                    cur = (i + 1) * A[i];
+                }
+                else
+                {
+                    cur = dct[st.Peek()] + (i - st.Peek()) * A[i];
+                }
+
+                cur %= MOD;
+                st.Push(i);
+                dct.Add(i, cur);
+                res += cur;
+                res %= MOD;
+            }
+
+            return res;
+        }
+
+        public int CalPoints(string[] ops)
+        {
+            if(ops==null||ops.Length==0)
+            {
+                return 0;
+            }
+
+
+        }
+
+        public int SmallestRangeI(int[] A, int K)
+        {
+            if(A==null||A.Length<=1)
+            {
+                return 0;
+            }
+
+            int n = A.Length;
+            int min = A[0], max = A[0];
+            int res = int.MaxValue;
+
+            for(int i=1;i<n;i++)
+            {
+                if(A[i]>max)
+                {
+                    max = A[i];
+                }
+
+                if(A[i]<min)
+                {
+                    min = A[i];
+                }
+            }
+
+            if(max-min<=2*K)
+            {
+                res = 0;
+            }
+            else
+            {
+                res = max - min - 2 * K;
+            }
+
+            return res;
+        }
+
+        public int SmallestRangeII(int[] A, int K)
+        {
+            if (A == null || A.Length <= 1)
+            {
+                return 0;
+            }
+
+            Array.Sort(A);
+            int n = A.Length;
+            int min = A[0], max = A[n-1];
+            int res = max-min;
+            max = max - K;
+
+            for(int i=0;i<n-1;i++)
+            {
+                max = Math.Max(A[i] + K, max);
+                min = Math.Min(A[0]+K, A[i + 1] - K);
+                res = Math.Min(res, max - min);
+            }
+
+            return Math.Min(res,max-min);
+        }
+
+        public int PartitionDisjoint(int[] A)
+        {
+            if(A==null||A.Length==0)
+            {
+                return 0;
+            }
+
+            int len = 0;
+            int n = A.Length;
+            int[] left = new int[n];
+            int[] right = new int[n];
+            int max = A[0];
+            for(int i=0;i<n;i++)
+            {
+                max = Math.Max(A[i], max);
+                left[i] = max;
+            }
+
+            int min = A[n - 1];
+
+            for(int i=n-1;i>=0;i--)
+            {
+                min = Math.Min(A[i], min);
+                right[i] = min;
+            }
+
+            for(int i=0;i<n-1;i++)
+            {
+                if(left[i]<=right[i+1])
+                {
+                    len = i + 1;
+                    break;
+                }
+            }
+
+            return len;
+        }
+
+        public int MaxSubarraySumCircular(int[] A)
+        {
+            if (A == null || A.Length == 0)
+            {
+                return 0;
+            }
+
+            int n = A.Length;
+
+            int max = 0;
+            int s = 0;
+            int min=0;
+            int maxSum = int.MinValue;
+            int minSum = int.MaxValue;
+
+            for (int i = 0; i < n; i++)
+            {
+                s += A[i];
+
+                max += A[i];
+
+                if(max<A[i])
+                {
+                    max = A[i];
+                }
+
+                if(maxSum<max)
+                {
+                    maxSum = max;
+                }
+
+                min += A[i];
+
+                if(A[i]<min)
+                {
+                    min = A[i];
+                }
+
+                if(min<minSum)
+                {
+                    minSum = min;
+                }
+            }
+
+            return maxSum>0?Math.Max(maxSum,s-minSum):maxSum;
+        }
+    }
+
+    public class TopVotedCandidate
+    {
+        Dictionary<int, int> dct;
+        public TopVotedCandidate(int[] persons, int[] times)
+        {
+            Dictionary<int, int> dt = new Dictionary<int, int>();
+            int n = times.Length;
+            int lead = -1;
+            for(int i=0;i<n;i++)
+            {
+
+            }
+        }
+
+        public int Q(int t)
+        {
+
+        }
     }
 }
 

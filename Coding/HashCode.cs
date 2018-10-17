@@ -478,6 +478,66 @@ namespace Coding
 
             return res;
         }
+
+        public bool HasGroupsSizeX(int[] deck)
+        {
+            if(deck==null||deck.Length==0)
+            {
+                return false;
+            }
+
+            Dictionary<int, int> dct = new Dictionary<int, int>();
+
+            foreach(int t in deck)
+            {
+                if(!dct.ContainsKey(t))
+                {
+                    dct.Add(t, 1);
+                }
+                else
+                {
+                    dct[t]++;
+                }
+            }
+
+            if(dct.Count==1&&dct[deck[0]]<2)
+            {
+                return false;
+            }
+
+            int x = dct[deck[0]];
+
+            foreach(int k in dct.Keys)
+            {
+                x = Math.Min(x, dct[k]);
+            }
+
+            if(x<2)
+            {
+                return false;
+            }
+
+            int count = dct.Keys.Count;
+            int i = 0;
+            int d = 2;
+            while(i!=count&&d<=x)
+            {
+                i = 0;
+
+                foreach(int k in dct.Keys)
+                {
+                    if(dct[k]%d==0)
+                    {
+                        i++;
+                    }
+                }
+
+                d++;
+            }
+
+
+            return i == count ;
+        }
     }
 
     public class RandomListNode
