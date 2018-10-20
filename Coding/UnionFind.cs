@@ -137,6 +137,7 @@ namespace Coding
             return canA;
         }
 
+        //Union Find Helper
         int FindRoot(int[] parents, int i)
         {
             while (parents[i] != i)
