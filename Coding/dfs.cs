@@ -725,5 +725,53 @@ namespace Coding
 
             return board;
         }
+
+        public int SwimInWater(int[,] grid)
+        {
+            if(grid==null||grid.Length==0)
+            {
+                return 0;
+            }
+
+            int n = grid.GetLength(0);
+            int l = 0, r = n * n - 1;
+
+            while(l<r)
+            {
+                int m = (l + r) / 2;
+                bool[,] visited = new bool[n, n];
+
+                if(CanReachEnd(grid,n,visited,0,0,m))
+                {
+                    r = m;
+                }
+                else
+                {
+                    l = m+1;
+                }
+            }
+
+            return l;
+        }
+
+        bool CanReachEnd(int[,] grid,int n,bool[,] visited,int i,int j,int t)
+        {
+            if(i<0||i>=n||j<0||j>=n||grid[i,j]>t|| visited[i, j])
+            {
+                return false;
+            }
+
+            if (i == n - 1 && j == n - 1)
+            {
+                return true;
+            }
+
+            visited[i, j] = true;
+
+            return CanReachEnd(grid, n, visited, i - 1, j,t) ||
+                   CanReachEnd(grid, n, visited, i + 1, j,t) ||
+                   CanReachEnd(grid, n, visited, i, j - 1,t) ||
+                   CanReachEnd(grid, n, visited, i, j + 1,t);
+        }
     }
 }

@@ -2278,9 +2278,9 @@ namespace Coding
                 values[num] += num;
             }
 
-            for(int i=0;i<n;i++)
+            for (int i = 0; i < n; i++)
             {
-                int takei = values[i]+skip;
+                int takei = values[i] + skip;
                 int skipi = Math.Max(skip, take);
                 skip = skipi;
                 take = takei;
@@ -2322,35 +2322,35 @@ namespace Coding
 
         public bool PredictTheWinner(int[] nums)
         {
-            if(nums==null||nums.Length==0)
+            if (nums == null || nums.Length == 0)
             {
                 return true;
             }
 
             int n = nums.Length;
 
-            if(n%2==0)
+            if (n % 2 == 0)
             {
                 return true;
             }
 
             int[,] dp = new int[n, n];
 
-            for(int i=0;i<n;i++)
+            for (int i = 0; i < n; i++)
             {
                 dp[i, i] = nums[i];
             }
 
-            for(int len=1;len<n;len++)
+            for (int len = 1; len < n; len++)
             {
-                for(int i=0;i<n-len;i++)
+                for (int i = 0; i < n - len; i++)
                 {
                     int j = i + len;
                     dp[i, j] = Math.Max(nums[i] - dp[i + 1, j], nums[j] - dp[i, j - 1]);
                 }
             }
 
-            return dp[0, n - 1]>=0;
+            return dp[0, n - 1] >= 0;
         }
 
         public bool PredictTheWinner1DP(int[] nums)
@@ -2369,11 +2369,11 @@ namespace Coding
 
             int[] dp = new int[n];
 
-            for(int i=n-1;i>=0;i--)
+            for (int i = n - 1; i >= 0; i--)
             {
-                for(int j=i;j<n;j++)
+                for (int j = i; j < n; j++)
                 {
-                    if(i==j)
+                    if (i == j)
                     {
                         dp[i] = nums[i];
                     }
@@ -2385,6 +2385,47 @@ namespace Coding
             }
 
             return dp[n - 1] >= 0;
+        }
+
+        public int SwimInWater(int[,] grid)
+        {
+            if (grid == null || grid.Length == 0)
+            {
+                return 0;
+            }
+
+            int n = grid.GetLength(0);
+            int[,] dp = new int[n, n];
+
+            for(int i=0;i<n;i++)
+            {
+                for(int j=0;j<n;j++)
+                {
+                    dp[i, j] = int.MaxValue;
+                }
+            }
+
+            SwimInWaterHelper(grid, 0, 0, grid[0, 0], dp);
+
+            return dp[n - 1, n - 1];
+        }
+
+        void SwimInWaterHelper(int[,] grid, int x,int y, int cur, int[,] dp)
+        {
+            int n = grid.GetLength(0);
+
+            if(x<0||x>=n||y<0||y>=n||dp[x,y]<Math.Max(cur,grid[x,y]))
+            {
+                return;
+            }
+
+            dp[x, y] = Math.Max(grid[x, y], cur);
+            cur = dp[x, y];
+
+            SwimInWaterHelper(grid, x - 1, y, cur, dp);
+            SwimInWaterHelper(grid, x + 1, y, cur, dp);
+            SwimInWaterHelper(grid, x, y-1, cur, dp);
+            SwimInWaterHelper(grid, x, y+1, cur, dp);
         }
     }
 }
